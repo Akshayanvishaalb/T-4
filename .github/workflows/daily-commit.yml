@@ -1,0 +1,25 @@
+name: Daily Commit Job
+
+on:
+  schedule:
+    - cron: '22 12 * * *'  # Runs daily at 12:22 UTC
+  workflow_dispatch:        # Allows manual test run
+
+jobs:
+  daily-commit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Make a change using 24f2007248@ds.study.iitm.ac.in
+        run: |
+          echo "Updated on $(date)" > daily.txt
+
+      - name: Commit and Push Changes
+        run: |
+          git config --global user.name "Auto Commit Bot"
+          git config --global user.email "24f2007248@ds.study.iitm.ac.in"
+          git add daily.txt
+          git commit -m "Daily update $(date)" || echo "No changes to commit"
+          git push
